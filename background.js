@@ -25,43 +25,16 @@ chrome.runtime.onMessage.addListener(function(response,sender,sendResponse){
     function closeAllIncognito(){
 
         var queryInfo = {
-          populate:true
         };
 
-        alert("inside closeAllIncognito");
-        chrome.windows.getAll(queryInfo,function(windows) {
-        for (i=0;i<windows.length;i++){
-            var window = windows[i];
-          for(j=0;j<window.tabs.length;j++){
-            tab = window.tabs[j];
-              alert("inside loop");
-            if(tab.pinned){
-              alert("inco tab detected");
-              chrome.tabs.remove(tab.id);
-            }
-            else{
-              alert("inco not detected");
-            }
+      chrome.tabs.query(queryInfo, function(tab) {
+        for (i=0;i<tab.length;i++){
+
+          if(tab[i].incognito){
+            chrome.tabs.remove(tab[i].id);
           }
-            
         }
-        
-
       });
-      // chrome.tabs.query(queryInfo, function(tab) {
-      //   for (i=0;i<tab.length;i++){
-      //     alert("inside loop");
-      //     if(tab[i].pinned){
-      //       alert("inco tab detected");
-      //       chrome.tabs.remove(tab[i].id);
-      //     }
-      //     else{
-      //       alert("inco not detected");
-      //     }
-      //   }
-        
-
-      // });
     }
 
     function getUrlParameters(myvar){
