@@ -22,6 +22,48 @@ chrome.runtime.onMessage.addListener(function(response,sender,sendResponse){
       });
     }
 
+    function closeAllIncognito(){
+
+        var queryInfo = {
+          populate:true
+        };
+
+        alert("inside closeAllIncognito");
+        chrome.windows.getAll(queryInfo,function(windows) {
+        for (i=0;i<windows.length;i++){
+            var window = windows[i];
+          for(j=0;j<window.tabs.length;j++){
+            tab = window.tabs[j];
+              alert("inside loop");
+            if(tab.pinned){
+              alert("inco tab detected");
+              chrome.tabs.remove(tab.id);
+            }
+            else{
+              alert("inco not detected");
+            }
+          }
+            
+        }
+        
+
+      });
+      // chrome.tabs.query(queryInfo, function(tab) {
+      //   for (i=0;i<tab.length;i++){
+      //     alert("inside loop");
+      //     if(tab[i].pinned){
+      //       alert("inco tab detected");
+      //       chrome.tabs.remove(tab[i].id);
+      //     }
+      //     else{
+      //       alert("inco not detected");
+      //     }
+      //   }
+        
+
+      // });
+    }
+
     function getUrlParameters(myvar){
 
       var url = myvar;
@@ -48,10 +90,21 @@ chrome.runtime.onMessage.addListener(function(response,sender,sendResponse){
 
     function main(){
 
-      var key;
+      var key="key not initialised";
+      var incognito_key = "incognito_key not intitialised";
       try{
         chrome.storage.sync.get("secret_key", function (obj) {
         key = String(obj['secret_key']);
+        // alert(key);
+        });
+      }
+      catch(err){
+        alert("some issues");
+      }
+
+      try{
+        chrome.storage.sync.get("incognito_key", function (obj) {
+        incognito_key = String(obj['incognito_key']);
         // alert(key);
         });
       }
@@ -76,15 +129,26 @@ chrome.runtime.onMessage.addListener(function(response,sender,sendResponse){
         
         if (dict['q']){
           alert(key);
+          alert(incognito_key);
           if(String(dict['q'])===key){
             deleteHistory();
           }
+
+          if(String(dict['q'])===incognito_key){
+            alert("here");
+            closeAllIncognito();
+          }
+
         }
 
         else if(dict['oq']){
 
           if(String(dict['oq'])===key){
             deleteHistory();
+          }
+
+          if(String(dict['q'])===incognito_key){
+            closeAllIncognito();
           }
         }
 
