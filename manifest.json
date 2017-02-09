@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+
+  "name": "Saviour",
+  "description": "An extension that can help you clear your browser history, when you are being monitored by someone, without any suspicion.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "icons" :{
+    "64": "icon.png" 
+  },
+  "background": 
+    {
+      
+      "scripts": ["background.js"]
+    },
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.co.in/*","http://www.google.co.in/*"],
+      "js": ["myScript.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "browsingData",
+    "storage"
+  ]
+}
